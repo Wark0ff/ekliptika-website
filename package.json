@@ -1,25 +1,42 @@
 {
   "name": "ekliptika-website",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "Сайт ООО «Эклиптика»: макеты главной страницы, три концепта",
+  "description": "Сайт ООО «Эклиптика»: строительство, реконструкция и отделка",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "gsap": "^3.15.0",
-    "lenis": "^1.3.26",
+    "lenis": "^1.3.25",
+    "lucide-react": "^0.427.0",
     "next": "^15.5.24",
+    "nodemailer": "^9.0.3",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "server-only": "^0.0.1",
+    "sharp": "^0.35.3"
   },
+  "browserslist": [
+    "supports es6-module and last 3 years",
+    "not dead"
+  ],
   "devDependencies": {
-    "@types/node": "^22.10.7",
+    "@types/node": "^20.14.14",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
-    "typescript": "^5.7.3"
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.5.24",
+    "postcss": "^8.4.40",
+    "tailwindcss": "^3.4.7",
+    "typescript": "^5.5.4",
+    "vitest": "^4.1.10"
   }
 }

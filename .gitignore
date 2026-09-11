@@ -1,6 +1,28 @@
-node_modules
-.next
-.vercel
+/node_modules
+/.next/
+/out/
+/build
+*.pem
+.env
+.env.production
+.env*.local
+.DS_Store
 *.tsbuildinfo
 next-env.d.ts
-.env*
+
+# Локальные dev-скиллы (не часть сайта)
+/.agents/
+.claude/skills/
+skills-lock.json
+
+# Рантайм-хранилище контента (кейсы/статьи) — не в гит
+.content/
+/*.tar.gz
+site.tar.gz
+/*.PNG
+/*.png
+/*.pdf
+/*.jpg
+
+# исходники макета для переноса, в сборку не входят
+_mockup/

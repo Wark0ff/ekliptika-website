@@ -1,0 +1,90 @@
+/* Tailwind: админка и калькулятор сметы. Публичный сайт оформлен в app/site.css. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-ink antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  :focus-visible {
+    outline: 2px solid theme('colors.gold.DEFAULT');
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .container-c {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8 lg:px-12;
+  }
+  .label {
+    @apply font-sans text-[11px] font-semibold uppercase tracking-label;
+  }
+  .label-gold {
+    @apply label text-gold;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-3 label;
+  }
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full px-8 py-4
+           text-sm font-medium uppercase tracking-[0.12em] transition-all duration-300 ease-smooth
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-gold {
+    @apply btn bg-gold text-ink hover:bg-gold-light;
+  }
+  .btn-outline {
+    @apply btn border border-gold/50 bg-transparent text-gold-dark hover:border-gold hover:bg-gold hover:text-ink;
+  }
+  .btn-dark {
+    @apply btn bg-ink text-paper hover:bg-graphite;
+  }
+  .btn-light {
+    @apply btn bg-ink text-paper hover:bg-gold hover:text-ink;
+  }
+  .btn-shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+    transform: translateX(-130%);
+  }
+  .btn-shine:hover::after {
+    animation: btnShine 0.9s ease;
+  }
+  @keyframes btnShine {
+    to {
+      transform: translateX(130%);
+    }
+  }
+
+  /* Индикатор загрузки (пульсирующие точки), адаптирован из Uiverse.io, adamgiebl, MIT */
+  .ekl-dot {
+    border-radius: 999px;
+    background-color: theme('colors.gold.DEFAULT');
+    animation: eklPulse 1.4s infinite ease-in-out both;
+  }
+  @keyframes eklPulse {
+    0%,
+    100% {
+      transform: scale(0.7);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.15);
+      opacity: 1;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
