@@ -1,0 +1,17 @@
+/* Карта сайта в оформлении страницы выбора. */
+.sm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  padding-bottom:clamp(40px,6vw,100px);align-items:start}
+.sm-card{border:1px solid #E4E0D6;background:#fff;padding:clamp(18px,2vw,28px)}
+.sm-card.sm-wide{grid-column:1 / -1}
+.sm-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  border-bottom:1px solid #E4E0D6;padding-bottom:12px;margin-bottom:16px}
+.sm-top h2{font-size:19px;font-weight:600;letter-spacing:-.025em}
+.sm-top span{font-family:var(--f-mono),ui-monospace,monospace;font-size:12px;color:#5E6679}
+.sm-card ul{display:grid;gap:10px}
+.sm-card li{font-size:14px;color:#4A5570;line-height:1.6;padding-left:16px;position:relative}
+.sm-card li::before{content:'';position:absolute;left:0;top:11px;width:7px;height:1px;background:#C8913A}
+.sm-card li a{color:#14234B;border-bottom:1px solid #C9C3B5}
+.sm-card li a:hover{border-color:#14234B}
+.sm-card ul.sm-two{grid-template-columns:1fr 1fr;gap:10px 28px}
+@media(max-width:980px){.sm-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.sm-grid{grid-template-columns:1fr}.sm-card ul.sm-two{grid-template-columns:1fr}}
