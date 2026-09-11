@@ -56,4 +56,5 @@ public/img/              стоковые фото Unsplash, id исходник
 
 ## Публикация
 
-Netlify: настройки сборки в `netlify.toml` (Node 22, `npm run build`), Next.js определяется автоматически.
+Vercel: импорт репозитория, фреймворк Next.js определяется автоматически, настройки по умолчанию.
+Node 20.11 или новее (конфиг использует `import.meta.dirname`). Папка `docs` в деплой не уходит (`.vercelignore`).
