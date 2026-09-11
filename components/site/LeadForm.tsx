@@ -85,7 +85,9 @@ export default function LeadForm({ id = 'lead', defaultBrief = '' }: { id?: stri
   );
 
   return (
-    <form className="rq" noValidate onSubmit={onSubmit}>
+    // method/action нужны, если JS ещё не загрузился: тогда форма уходит POST-ом на API,
+    // а не GET-ом, и имя с телефоном не попадают в адресную строку и логи.
+    <form className="rq" method="post" action="/api/lead" noValidate onSubmit={onSubmit}>
       <div className="rq-row">
         {field('name', 'Как к вам обращаться', 'text', 'name', true)}
         {field('phone', 'Телефон', 'tel', 'tel', true)}

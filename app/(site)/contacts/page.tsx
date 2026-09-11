@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   alternates: { canonical: '/contacts' },
 };
 
-export default async function ContactsPage(props: { searchParams: Promise<{ brief?: string }> }) {
-  const { brief } = await props.searchParams;
+export default async function ContactsPage(props: { searchParams: Promise<{ brief?: string; sent?: string }> }) {
+  const { brief, sent } = await props.searchParams;
   const r = SITE.requisites;
   return (
     <>
@@ -43,7 +43,14 @@ export default async function ContactsPage(props: { searchParams: Promise<{ brie
               Карточка предприятия <span aria-hidden="true">→</span>
             </Link>
           </div>
-          <LeadForm id="contacts" defaultBrief={brief} />
+          {sent === '1' ? (
+            <div className="rq rq-done" role="status">
+              <p className="rq-done-t">Заявка отправлена</p>
+              <p>Свяжемся с вами в течение рабочего дня. Коммерческое предложение направим в течение 24 часов.</p>
+            </div>
+          ) : (
+            <LeadForm id="contacts" defaultBrief={brief} />
+          )}
         </div>
       </section>
     </>
