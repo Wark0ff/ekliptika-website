@@ -8,6 +8,11 @@ import type { Post, Project } from './types';
 
 
 const DIR = process.env.CONTENT_DIR || path.join(process.cwd(), '.content');
+
+/** Демо-стенд на Vercel: файловая система только для чтения, хранилища нет. Страницы берут сид
+ *  из lib/data напрямую, а сохранение из админки честно сообщает, что здесь оно недоступно. */
+const DEMO = !!process.env.VERCEL && !process.env.CONTENT_DIR;
+const DEMO_ERROR = 'На демо-стенде изменения не сохраняются: админка работает на боевом сервере.';
 const POSTS_FILE = path.join(DIR, 'posts.json');
 const PROJECTS_FILE = path.join(DIR, 'projects.json');
 
@@ -43,6 +48,10 @@ async function ensureSeeded(file: string, seed: unknown): Promise<void> {
  *  но запись идёт только поверх успешно прочитанного файла: иначе сохранение одной статьи
  *  перезаписало бы хранилище сидом и стёрло всё, что владелец добавил через админку. */
 async function readJson<T>(file: string, seed: T, strict = false): Promise<T> {
+  if (DEMO) {
+    if (strict) throw new Error(DEMO_ERROR);
+    return seed;
+  }
   try {
     await ensureSeeded(file, seed);
     const raw = await fs.readFile(file, 'utf8');
