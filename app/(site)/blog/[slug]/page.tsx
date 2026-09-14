@@ -6,6 +6,7 @@ import Lines from '@/components/site/Lines';
 import { getPost, getPosts } from '@/lib/content';
 import { JsonLd, breadcrumbJsonLd } from '@/lib/seo';
 import { CTA, FALLBACK_IMAGE, SITE } from '@/lib/site';
+import { fmtDate as fmt } from '@/lib/text';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,8 +21,6 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     openGraph: { type: 'article', title: post.title, description: post.excerpt, publishedTime: post.date, images: [{ url: post.cover || FALLBACK_IMAGE }] },
   };
 }
-
-const fmt = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 
 export default async function PostPage(props: { params: Promise<{ slug: string }> }) {
   const { slug } = await props.params;

@@ -10,6 +10,8 @@ export default function Reveals() {
   const pathname = usePathname();
 
   useEffect(() => {
+    // Отметка для страховки в <head>: если скрипты не запустились, она через 4 с снимает скрытие.
+    document.documentElement.dataset.rv = '1';
     const scan = () => Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)'));
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
       scan().forEach((el) => el.classList.add('is-in'));
@@ -24,7 +26,7 @@ export default function Reveals() {
           }
         });
       },
-      { rootMargin: '0px 0px -10% 0px', threshold: 0.01 },
+      { rootMargin: '0px 0px -4% 0px', threshold: 0 },
     );
     scan().forEach((el) => io.observe(el));
     const late = window.setTimeout(() => scan().forEach((el) => io.observe(el)), 400);

@@ -5,6 +5,7 @@ import PageHero from '@/components/site/PageHero';
 import { JsonLd, breadcrumbJsonLd } from '@/lib/seo';
 import { getPosts } from '@/lib/content';
 import { FALLBACK_IMAGE } from '@/lib/types';
+import { fmtDate as fmt } from '@/lib/text';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,8 +15,6 @@ export const metadata: Metadata = {
     'Разборы для заказчиков: из чего складывается смета, какие скрытые работы проверять, как строится график капитального ремонта.',
   alternates: { canonical: '/blog' },
 };
-
-const fmt = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 
 export default async function BlogPage() {
   const posts = [...(await getPosts())].sort((a, b) => +new Date(b.date) - +new Date(a.date));

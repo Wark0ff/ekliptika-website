@@ -53,9 +53,11 @@ export const metadata: Metadata = {
 };
 
 /** Класс js включает скрытие элементов до их появления (без JS всё видно сразу).
+ *  Страховка: если через 4 с компонент Reveals так и не запустился (бандл не загрузился), класс снимается.
  *  Класс intro-seen убирает заставку, если её уже показывали в этой вкладке. */
 const HEAD_SCRIPT =
-  "document.documentElement.classList.add('js');" +
+  "var d=document.documentElement;d.classList.add('js');" +
+  "setTimeout(function(){if(!d.dataset.rv)d.classList.remove('js')},4000);" +
   "try{if(sessionStorage.getItem('ekl-intro'))document.documentElement.classList.add('intro-seen');" +
   "else sessionStorage.setItem('ekl-intro','1')}catch(e){}";
 

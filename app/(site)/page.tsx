@@ -7,6 +7,7 @@ import ProjectCard from '@/components/site/ProjectCard';
 import Faq from '@/components/site/Faq';
 import HorizontalDirections from '@/components/site/HorizontalDirections';
 import { JsonLd, faqJsonLd } from '@/lib/seo';
+import { fmtDate as fmt } from '@/lib/text';
 import { getPosts, getProjects } from '@/lib/content';
 import {
   ABOUT, CONDITIONS, CTA, FAQ, HERO, OBJECT_TYPES, PROCESS, SERVICES, SITE, TEAM, WARRANTY_MONTHS,
@@ -15,7 +16,6 @@ import {
 export const revalidate = 600;
 
 const idx = (i: number) => ({ '--i': i }) as CSSProperties;
-const fmt = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 
 export default async function HomePage() {
   const [projects, posts] = await Promise.all([getProjects(), getPosts()]);
@@ -44,7 +44,7 @@ export default async function HomePage() {
         <div className="v1-hero-shade" aria-hidden="true" />
         <h1 className="v1-hero-h">
           {HERO.words.map((w, i) => (
-            <span className="ln" key={w}><span style={idx(i)}>{w}</span></span>
+            <span className="ln" key={w} aria-hidden="true"><span style={idx(i)}>{w}</span> </span>
           ))}
           <span className="vh">{HERO.title}</span>
         </h1>

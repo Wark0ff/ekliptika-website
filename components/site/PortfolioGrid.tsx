@@ -28,7 +28,7 @@ export default function PortfolioGrid({ projects }: { projects: Project[] }) {
       </div>
       <div className="v1-grid">
         {list.map((p, i) => (
-          <ProjectCard key={p.slug} project={p} variant={i === 0 ? 'wide' : undefined} priority={i === 0}
+          <ProjectCard key={p.slug} project={p} variant={i === 0 ? 'wide' : undefined} priority={i === 0} titleAs="h2"
             sizes={i === 0 ? '(max-width:600px) 100vw, 66vw' : '(max-width:600px) 100vw, (max-width:1000px) 50vw, 33vw'} />
         ))}
       </div>

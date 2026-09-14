@@ -61,7 +61,7 @@ export default function Header() {
     <>
       <header className={`v1-head${solid || open ? ' is-solid' : ''}${hidden && !open ? ' is-hidden' : ''}`}>
         <Link href="/" className="v1-head-logo" aria-label="Эклиптика, на главную">
-          <Logo size={36} />
+          <Logo size={36} tag={false} />
         </Link>
         <nav className="v1-head-nav" aria-label="Основное меню">
           {NAV.map((item) => (

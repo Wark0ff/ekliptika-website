@@ -34,11 +34,11 @@ export default function DocumentsPage() {
         intro="Документы для проверки контрагента и заключения договора. Копии направляем по запросу на почту."
       />
       <section className="v1-w v1-sec">
-        <div className="v1-split">
+        <div className="v1-split is-main-wide">
           <div className="v1-cells">
             {DOCS.map((d, i) => (
               <article key={d.title} data-reveal="fade" style={idx(i % 2)}>
-                <h3>{d.href ? <Link className="v1-ul" href={d.href}>{d.title}</Link> : d.title}</h3>
+                <h2>{d.href ? <Link className="v1-ul" href={d.href}>{d.title}</Link> : d.title}</h2>
                 <p>{d.note}</p>
               </article>
             ))}

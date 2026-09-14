@@ -24,7 +24,7 @@ export default async function ContactsPage(props: { searchParams: Promise<{ brie
         intro="Опишите задачу: тип объекта, площадь, адрес и желаемый срок. Коммерческое предложение направим в течение 24 часов."
       />
       <section className="v1-w v1-sec">
-        <div className="v1-ask-grid" style={{ marginTop: 0 }}>
+        <div className="v1-ask-grid is-form-first" style={{ marginTop: 0 }}>
           <div>
             <dl className="v1-contacts">
               <div><dt>Телефон</dt><dd><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></dd></div>

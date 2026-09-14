@@ -6,7 +6,6 @@ const COMPANY = [
   { href: '/about', label: 'О компании' },
   { href: '/portfolio', label: 'Объекты' },
   { href: '/blog', label: 'Статьи' },
-  { href: '/smeta', label: 'Онлайн-смета' },
   { href: '/documents', label: 'Документы' },
   { href: '/company-card', label: 'Карточка предприятия' },
 ];
@@ -17,7 +16,7 @@ export default function Footer() {
     <footer className="v1-footer">
       <div className="v1-w v1-footer-top">
         <div>
-          <Logo size={42} />
+          <Logo size={60} />
           <p>{SITE.slogan}</p>
         </div>
         <Link className="v1-pill" href="/contacts">

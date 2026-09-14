@@ -32,7 +32,8 @@ export default function SmoothScroll() {
       const target = document.querySelector<HTMLElement>(url.hash);
       if (!target) return;
       e.preventDefault();
-      lenis.scrollTo(target, { offset: -84, duration: 1.2 });
+      // Отступ под шапку Lenis берёт сам из scroll-padding-top у <html>.
+      lenis.scrollTo(target, {duration: 1.2 });
       history.replaceState(null, '', url.hash);
     };
     document.addEventListener('click', onClick);
@@ -56,7 +57,7 @@ export default function SmoothScroll() {
     const hash = window.location.hash;
     const target = hash ? document.querySelector<HTMLElement>(hash) : null;
     if (lenis && !initial) {
-      if (target) lenis.scrollTo(target, { offset: -84, immediate: true });
+      if (target) lenis.scrollTo(target, {immediate: true });
       else lenis.scrollTo(0, { immediate: true });
     }
     const t = window.setTimeout(() => ScrollTrigger.refresh(), 250);

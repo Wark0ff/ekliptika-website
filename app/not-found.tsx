@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import SiteLayout from './(site)/layout';
 
+/** 404 в оформлении сайта: с шапкой и подвалом, чтобы можно было уйти в любой раздел. */
 export default function NotFound() {
   return (
-    <div className="v1">
+    <SiteLayout>
       <section className="v1-state-page">
         <div>
           <p className="v1-num">Ошибка 404</p>
@@ -11,6 +13,6 @@ export default function NotFound() {
           <Link className="v1-pill" href="/">На главную<i aria-hidden="true">↗</i></Link>
         </div>
       </section>
-    </div>
+    </SiteLayout>
   );
 }

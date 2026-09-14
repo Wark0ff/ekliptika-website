@@ -41,8 +41,9 @@ export default function CompanyCardPage() {
       </div>
       <section className="v1-w v1-sec">
         <div className="v1-sheet" style={{ maxWidth: 860, marginInline: 'auto' }}>
-          <h2 className="v1-sheet-h">Карточка предприятия</h2>
-          <p style={{ margin: '10px 0 24px', color: '#5A6275' }}>{r.legalNameFull}</p>
+          {/* На экране название уже в заголовке страницы, на печати шапка скрыта и нужен этот. */}
+          <h2 className="v1-sheet-h v1-print-only">Карточка предприятия</h2>
+          <p className="v1-print-only" style={{ margin: '10px 0 24px', color: '#5A6275' }}>{r.legalNameFull}</p>
           <table className="v1-table">
             <tbody>
               {rows.map(([k, v]) => <tr key={k}><th scope="row">{k}</th><td>{v}</td></tr>)}

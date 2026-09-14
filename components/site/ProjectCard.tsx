@@ -1,17 +1,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { coverOf, type Project } from '@/lib/types';
+import { nb } from '@/lib/text';
 
 const lawLabel = (law: Project['law']) => (law === 'Коммерческий' ? 'договор подряда' : law);
 
-/** Карточка объекта. Пример объекта помечается словом «Пример» в подписи, а не наклейкой на фото. */
+/** Карточка объекта. Пример объекта помечается словом «Пример» в подписи, а не наклейкой на фото.
+ *  titleAs: уровень заголовка по месту (h2 прямо под h1 страницы, h3 внутри раздела). */
 export default function ProjectCard({
-  project, variant, priority = false, sizes = '(max-width:900px) 100vw, 33vw',
+  project, variant, priority = false, sizes = '(max-width:900px) 100vw, 33vw', titleAs: Title = 'h3',
 }: {
   project: Project;
   variant?: 'lg' | 'wide';
   priority?: boolean;
   sizes?: string;
+  titleAs?: 'h2' | 'h3';
 }) {
   const cls = ['v1-pc', variant === 'lg' && 'is-lg', variant === 'wide' && 'is-wide'].filter(Boolean).join(' ');
   return (
@@ -24,8 +27,8 @@ export default function ProjectCard({
           {project.example && <b>Пример · </b>}
           {project.category}, {lawLabel(project.law)}
         </p>
-        <h3>{project.title}</h3>
-        <p className="v1-pc-meta">{project.area}, срок {project.term}</p>
+        <Title>{nb(project.title)}</Title>
+        <p className="v1-pc-meta">{nb(project.area)}, срок {nb(project.term)}</p>
       </div>
     </Link>
   );
