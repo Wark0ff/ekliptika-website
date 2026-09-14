@@ -15,7 +15,9 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    let last = window.scrollY;
+    // Точка отсчёта направления. Шапка прячется или возвращается только после сдвига на 12px
+    // в одну сторону: мелкие колебания плавной прокрутки и тачпада её не дёргают.
+    let anchor = window.scrollY;
     let raf = 0;
     const onScroll = () => {
       if (raf) return;
@@ -23,8 +25,16 @@ export default function Header() {
         raf = 0;
         const y = window.scrollY;
         setSolid(y > 60);
-        setHidden(y > 320 && y > last + 2);
-        if (Math.abs(y - last) > 2) last = y;
+        if (y < 320) {
+          setHidden(false);
+          anchor = y;
+        } else if (y - anchor > 12) {
+          setHidden(true);
+          anchor = y;
+        } else if (anchor - y > 12) {
+          setHidden(false);
+          anchor = y;
+        }
       });
     };
     onScroll();

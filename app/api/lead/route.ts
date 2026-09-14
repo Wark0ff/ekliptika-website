@@ -6,8 +6,14 @@ export const dynamic = 'force-dynamic';
 
 const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, LEAD_TO } = process.env;
 
+/** Однострочные поля: переводы строк убираем, чтобы в заголовки письма ничего не подмешали. */
 function clean(v: unknown, max = 2000) {
   return String(v ?? '').replace(/[\r\n]+/g, ' ').trim().slice(0, max);
+}
+
+/** Описание задачи идёт только в тело письма, поэтому абзацы сохраняем. */
+function cleanText(v: unknown, max = 4000) {
+  return String(v ?? '').replace(/\r\n?/g, '\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, max);
 }
 
 /** Без JS браузер отправляет обычную форму: отвечаем редиректом на страницу контактов.
@@ -36,7 +42,7 @@ export async function POST(req: Request) {
   const phone = clean(body.phone, 50);
   const email = clean(body.email, 200);
   const company = clean(body.company, 200);
-  const tender = clean(body.tender ?? body.message, 4000);
+  const tender = cleanText(body.tender ?? body.message);
   const page = clean(body.page ?? req.headers.get('referer'), 500);
 
   // Форма с JS проверяет согласие на клиенте, у формы без JS проверяем здесь.

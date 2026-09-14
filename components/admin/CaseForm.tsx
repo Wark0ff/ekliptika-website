@@ -132,7 +132,7 @@ export default function CaseForm({ project }: { project?: Project }) {
       <div className="mt-8">
         <h2 className="text-sm font-black uppercase tracking-wider">Фотографии</h2>
         <p className="mt-1 text-xs text-graphite-400">
-          Первый кадр — обложка (карточка и фон страницы объекта), остальные идут в галерею объекта.
+          Первый кадр станет обложкой (карточка и фон страницы объекта), остальные пойдут в галерею. Порядок меняется стрелками.
         </p>
         <div className="mt-3">
           <GalleryField defaultValue={v?.photos ? v.photos.split('\n').filter(Boolean) : project?.photos ?? []} />

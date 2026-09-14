@@ -5,7 +5,7 @@ import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { savePostAction, type PostFormState } from '@/app/admin/(protected)/posts/actions';
 import ImageField from '@/components/admin/ImageField';
-import type { Post } from '@/lib/site';
+import type { Post } from '@/lib/types';
 
 function SaveButton() {
   const { pending } = useFormStatus();

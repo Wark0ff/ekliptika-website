@@ -19,9 +19,9 @@ export default function PortfolioGrid({ projects }: { projects: Project[] }) {
 
   return (
     <div>
-      <div className="v1-tabs" role="tablist" aria-label="Фильтр по направлению">
+      <div className="v1-tabs" role="group" aria-label="Фильтр по направлению">
         {tabs.map((t) => (
-          <button key={t} type="button" role="tab" aria-selected={filter === t} onClick={() => setFilter(t)}>
+          <button key={t} type="button" aria-pressed={filter === t} onClick={() => setFilter(t)}>
             {t}<sup>{counts[t]}</sup>
           </button>
         ))}

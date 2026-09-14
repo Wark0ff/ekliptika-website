@@ -78,7 +78,7 @@ export default function LeadForm({ id = 'lead', defaultBrief = '' }: { id?: stri
     <p className="rq-f">
       <label htmlFor={`${id}-${name}`}>{label}{required && <b aria-hidden="true"> *</b>}</label>
       <input id={`${id}-${name}`} name={name} type={type} autoComplete={autoComplete} required={required}
-        inputMode={type === 'tel' ? 'tel' : undefined}
+        inputMode={type === 'tel' ? 'tel' : undefined} spellCheck={type === 'email' ? false : undefined}
         aria-invalid={!!errors[name]} aria-describedby={errors[name] ? `${id}-${name}-e` : undefined} />
       {errors[name] && <span className="rq-err" id={`${id}-${name}-e`} role="alert">{errors[name]}</span>}
     </p>

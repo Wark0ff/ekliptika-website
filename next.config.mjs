@@ -2,6 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Значок Next.js в углу при разработке мешает смотреть вёрстку.
+  devIndicators: false,
   compress: true,
   // VPS: собирается в standalone и запускается systemd-юнитом (deploy/ekliptika.service).
   output: 'standalone',

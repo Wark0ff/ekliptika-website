@@ -22,11 +22,13 @@ apt install -y ufw && ufw allow OpenSSH && ufw allow 80/tcp && ufw allow 443/tcp
 
 curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
 apt install -y nodejs nginx certbot python3-certbot-nginx
+mkdir -p /var/www/certbot
 node -v   # v22.x, нужен Node 20.11 или новее
 ```
 
-Если сайт ставится на тот же VPS, что и ТЕРА ГРУПП, пропустите этот шаг и возьмите свободный порт
-(например 3001) в `deploy/ekliptika.service` и `deploy/nginx.conf`.
+Если сайт ставится на тот же VPS, что и ТЕРА ГРУПП, пропустите этот шаг и возьмите свободный порт,
+например 3001: `PORT=3001` в `deploy/ekliptika.service`, оба `proxy_pass` в `deploy/nginx.conf`
+и адрес в проверке `curl` из шага 6.
 
 ## 2. Папки
 

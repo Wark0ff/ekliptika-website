@@ -45,11 +45,17 @@ export default function SmoothScroll() {
     };
   }, []);
 
+  const firstPath = useRef(true);
+
   useEffect(() => {
+    // При первой загрузке позицию не трогаем: браузер сам восстанавливает её после обновления,
+    // а принудительный скролл наверх давал рывок страницы и шапки.
+    const initial = firstPath.current;
+    firstPath.current = false;
     const lenis = lenisRef.current;
     const hash = window.location.hash;
     const target = hash ? document.querySelector<HTMLElement>(hash) : null;
-    if (lenis) {
+    if (lenis && !initial) {
       if (target) lenis.scrollTo(target, { offset: -84, immediate: true });
       else lenis.scrollTo(0, { immediate: true });
     }

@@ -34,7 +34,8 @@ function createToken(): string {
 }
 
 function verifyToken(token: string | undefined): boolean {
-  if (!token) return false;
+  // Без секрета подпись считается от пустого ключа, её подделает кто угодно: такой токен не принимаем.
+  if (!token || !process.env.ADMIN_SESSION_SECRET) return false;
   const parts = token.split('.');
   if (parts.length !== 3) return false;
   const [exp, nonce, sig] = parts;

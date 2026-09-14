@@ -51,7 +51,7 @@ export default function GalleryField({ defaultValue = [] }: { defaultValue?: str
     <div>
       <div className="flex items-center justify-between">
         <label className="label text-graphite-400">Галерея объекта</label>
-        <span className="text-xs text-graphite-400">{photos.length} фото · первый — обложка</span>
+        <span className="text-xs text-graphite-400">{photos.length} фото, первое станет обложкой</span>
       </div>
       <input type="hidden" name="photos" value={photos.join('\n')} />
 

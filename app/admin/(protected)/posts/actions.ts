@@ -3,20 +3,11 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { isAuthenticated } from '@/lib/auth';
+import { fail, type FormState } from '@/lib/form-state';
 import { getPost, savePost, deletePost, slugify } from '@/lib/content';
 import type { Post } from '@/lib/types';
 
-export type PostFormState = { error?: string; values?: Record<string, string> };
-/** После ошибки React 19 сбрасывает форму. Возвращаем введённое, чтобы форма восстановила поля
- *  и текст статьи или описание объекта не пропали. */
-function fail(error: string, formData: FormData) {
-  const values = Object.fromEntries(
-    [...formData.entries()].filter(([k, v]) => typeof v === 'string' && !k.startsWith('$')),
-  ) as Record<string, string>;
-  return { error, values };
-}
-
-
+export type PostFormState = FormState;
 
 function revalidateBlog(slug: string) {
   revalidatePath('/');
@@ -24,7 +15,6 @@ function revalidateBlog(slug: string) {
   revalidatePath(`/blog/${slug}`);
   revalidatePath('/sitemap.xml');
 }
-
 
 function readingTime(body: string): string {
   const words = body.trim().split(/\s+/).filter(Boolean).length;
@@ -44,10 +34,8 @@ export async function savePostAction(
   if (!title) return fail('Укажите заголовок.', formData);
   if (!bodyRaw) return fail('Текст статьи не может быть пустым.', formData);
 
-
   const slug = editingSlug || slugify(title);
   if (!slug) return fail('Не удалось построить адрес (slug) из заголовка.', formData);
-
 
   if (!editingSlug && (await getPost(slug))) {
     return fail(`Статья с адресом «${slug}» уже есть. Измените заголовок.`, formData);

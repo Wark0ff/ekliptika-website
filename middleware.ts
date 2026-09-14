@@ -62,5 +62,5 @@ export async function middleware(req: NextRequest) {
 
 // Охраняем сам /admin и всё под ним, кроме страницы входа.
 export const config = {
-  matcher: ['/admin', '/admin/((?!login).*)'],
+  matcher: ['/admin', '/admin/((?!login$).*)'],
 };

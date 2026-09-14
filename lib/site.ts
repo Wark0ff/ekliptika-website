@@ -11,6 +11,7 @@ export * from './types';
 export { SITE, CTA, NAV, DIRECTION_LINKS } from './brand';
 export { PROJECTS, POSTS, OBJECT_TYPES };
 
+/** PENDING: гарантийный срок, срок КП (24 ч) и работа без аванса взяты из шаблона, подтверждает заказчик. */
 export const WARRANTY_MONTHS = 36;
 
 /** PENDING: предварительные цифры. Юрлицо зарегистрировано в 2026 году,
@@ -101,14 +102,5 @@ export const FAQ = [
 ];
 
 export const PROJECT_FILTERS: readonly (ProjectCategory | 'все')[] = ['все', ...CATEGORIES];
-
-export function getProject(slug: string): Project | undefined {
-  return PROJECTS.find((p) => p.slug === slug);
-}
-
-export function nextProject(slug: string): Project {
-  const i = PROJECTS.findIndex((p) => p.slug === slug);
-  return PROJECTS[(i + 1) % PROJECTS.length];
-}
 
 export const getObjectType = (slug: string) => OBJECT_TYPES.find((t) => t.slug === slug);
