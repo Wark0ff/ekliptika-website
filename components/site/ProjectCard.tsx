@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Project } from '@/lib/types';
+import { coverOf, type Project } from '@/lib/types';
 
 const lawLabel = (law: Project['law']) => (law === 'Коммерческий' ? 'договор подряда' : law);
 
@@ -17,7 +17,7 @@ export default function ProjectCard({
   return (
     <Link href={`/portfolio/${project.slug}`} className={cls}>
       <div className="v1-pc-img">
-        <Image src={project.photos[0]} alt={project.example ? '' : project.title} fill priority={priority} sizes={sizes} />
+        <Image src={coverOf(project)} alt={project.example ? '' : project.title} fill priority={priority} sizes={sizes} />
       </div>
       <div className="v1-pc-tx">
         <p className="v1-pc-cat">

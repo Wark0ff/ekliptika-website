@@ -89,7 +89,7 @@ export default function GalleryField({ defaultValue = [] }: { defaultValue?: str
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addUrl(); } }}
-            placeholder="или вставьте путь /portfolio/… и Enter"
+            placeholder="или вставьте путь /uploads/… и Enter"
             className="min-w-0 flex-1 rounded-sm border border-line bg-paper px-3 py-2 text-xs text-graphite outline-none focus:border-gold"
           />
           <button type="button" onClick={addUrl} className="rounded-sm border border-line px-3 py-2 text-xs font-semibold hover:border-gold">Добавить</button>

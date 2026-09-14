@@ -14,7 +14,7 @@ export type LoginState = { error?: string };
 
 
 export async function login(_prev: LoginState, formData: FormData): Promise<LoginState> {
-  if (isLockedOut()) {
+  if (await isLockedOut()) {
     return { error: 'Слишком много попыток. Попробуйте через несколько минут.' };
   }
 
@@ -25,17 +25,17 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
   }
 
   if (!verifyPassword(password)) {
-    recordFailure();
+    await recordFailure();
     return { error: 'Неверный пароль.' };
   }
 
-  clearFailures();
-  startSession();
+  await clearFailures();
+  await startSession();
   redirect('/admin');
 }
 
 
 export async function logout(): Promise<void> {
-  endSession();
+  await endSession();
   redirect('/admin/login');
 }

@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { saveCaseAction, type CaseFormState } from '@/app/admin/(protected)/cases/actions';
 import GalleryField from '@/components/admin/GalleryField';
 import { CATEGORIES } from '@/lib/types';
-import type { Project, CaseStage } from '@/lib/site';
+import type { Project, CaseStage } from '@/lib/types';
 
 
 
@@ -47,7 +47,8 @@ function Field({
 }
 
 export default function CaseForm({ project }: { project?: Project }) {
-  const [state, formAction] = useFormState<CaseFormState, FormData>(saveCaseAction, {});
+  const [state, formAction] = useActionState<CaseFormState, FormData>(saveCaseAction, {});
+  const v = state.values;
   const [stages, setStages] = useState<CaseStage[]>(
     project?.stages?.length ? project.stages : [{ label: '', title: '', text: '' }],
   );
@@ -66,13 +67,13 @@ export default function CaseForm({ project }: { project?: Project }) {
       <input type="hidden" name="kpiJson" value={JSON.stringify(kpi)} />
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field name="title" label="Название объекта *" defaultValue={project?.title} className="sm:col-span-2" />
-        <Field name="short" label="Короткое имя (для крупного шрифта)" defaultValue={project?.short} placeholder="Детский сад" />
-        <Field name="subtitle" label="Подзаголовок" defaultValue={project?.subtitle} placeholder="// Строительство под ключ" />
+        <Field name="title" label="Название объекта *" defaultValue={v?.title ?? project?.title} className="sm:col-span-2" />
+        <Field name="short" label="Короткое имя (для крупного шрифта)" defaultValue={v?.short ?? project?.short} placeholder="Квартира 75 м²" />
+        <Field name="subtitle" label="Подзаголовок" defaultValue={v?.subtitle ?? project?.subtitle} placeholder="// Ремонт и отделка под ключ" />
 
         <div>
           <label htmlFor="category" className={labelCls}>Категория *</label>
-          <select id="category" name="category" defaultValue={project?.category ?? 'образование'} className={field}>
+          <select id="category" name="category" defaultValue={v?.category ?? project?.category ?? 'жильё'} className={field}>
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
@@ -80,65 +81,76 @@ export default function CaseForm({ project }: { project?: Project }) {
         </div>
         <div>
           <label htmlFor="status" className={labelCls}>Статус</label>
-          <select id="status" name="status" defaultValue={project?.status ?? 'Сдан'} className={field}>
+          <select id="status" name="status" defaultValue={v?.status ?? project?.status ?? 'Сдан'} className={field}>
             <option>Сдан</option>
             <option>В работе</option>
           </select>
         </div>
 
-        <Field name="customer" label="Заказчик" defaultValue={project?.customer} />
-        <Field name="location" label="Локация" defaultValue={project?.location} placeholder="Новорижское ш., МО" />
+        <Field name="customer" label="Заказчик" defaultValue={v?.customer ?? project?.customer} />
+        <Field name="location" label="Локация" defaultValue={v?.location ?? project?.location} placeholder="Москва" />
 
         <div>
           <label htmlFor="law" className={labelCls}>Основание</label>
-          <select id="law" name="law" defaultValue={project?.law ?? 'Коммерческий'} className={field}>
+          <select id="law" name="law" defaultValue={v?.law ?? project?.law ?? 'Коммерческий'} className={field}>
             <option>Коммерческий</option>
             <option>44-ФЗ</option>
             <option>223-ФЗ</option>
           </select>
         </div>
-        <Field name="year" label="Год" defaultValue={project?.year} placeholder="2024" />
+        <Field name="year" label="Год" defaultValue={v?.year ?? project?.year} placeholder="2024" />
 
-        <Field name="budget" label="Стоимость" defaultValue={project?.budget} placeholder="48,5 млн ₽" />
+        <Field name="budget" label="Стоимость" defaultValue={v?.budget ?? project?.budget} placeholder="по смете" />
         <div>
           <label htmlFor="budgetLabel" className={labelCls}>Подпись стоимости</label>
-          <select id="budgetLabel" name="budgetLabel" defaultValue={project?.budgetLabel ?? 'Бюджет'} className={field}>
+          <select id="budgetLabel" name="budgetLabel" defaultValue={v?.budgetLabel ?? project?.budgetLabel ?? 'Бюджет'} className={field}>
             <option>Бюджет</option>
             <option>Цена</option>
           </select>
         </div>
 
-        <Field name="term" label="Срок" defaultValue={project?.term} placeholder="11 месяцев" />
-        <Field name="area" label="Площадь" defaultValue={project?.area} placeholder="340 м²" />
+        <Field name="term" label="Срок" defaultValue={v?.term ?? project?.term} placeholder="11 месяцев" />
+        <Field name="area" label="Площадь" defaultValue={v?.area ?? project?.area} placeholder="340 м²" />
+
+        <label className="flex items-start gap-3 rounded-sm border border-line bg-paper p-4 text-sm sm:col-span-2">
+          <input type="checkbox" name="example" defaultChecked={v ? v.example === 'on' : !!project?.example} className="mt-0.5 h-4 w-4 accent-gold" />
+          <span>
+            <b>Пример объекта</b>
+            <span className="block text-graphite-400">
+              Для объектов со стоковыми фото и типовыми параметрами: на сайте появится пометка «Пример»,
+              страница закрыта от поисковиков. Для своих объектов галочку снимите.
+            </span>
+          </span>
+        </label>
 
         <div className="sm:col-span-2">
           <label htmlFor="summary" className={labelCls}>Краткое описание (для карточек)</label>
-          <textarea id="summary" name="summary" defaultValue={project?.summary} rows={2} className={field} />
+          <textarea id="summary" name="summary" defaultValue={v?.summary ?? project?.summary} rows={2} className={field} />
         </div>
       </div>
 
       <div className="mt-8">
         <h2 className="text-sm font-black uppercase tracking-wider">Фотографии</h2>
         <p className="mt-1 text-xs text-graphite-400">
-          Первый кадр — обложка (карточка и фон страницы кейса), остальные идут в галерею объекта.
+          Первый кадр — обложка (карточка и фон страницы объекта), остальные идут в галерею объекта.
         </p>
         <div className="mt-3">
-          <GalleryField defaultValue={project?.photos ?? []} />
+          <GalleryField defaultValue={v?.photos ? v.photos.split('\n').filter(Boolean) : project?.photos ?? []} />
         </div>
       </div>
 
       <div className="mt-8 grid gap-5">
         <div>
           <label htmlFor="task" className={labelCls}>Задача (по цели на строку)</label>
-          <textarea id="task" name="task" defaultValue={project?.task?.join('\n')} rows={3} className={field} />
+          <textarea id="task" name="task" defaultValue={v?.task ?? project?.task?.join('\n')} rows={3} className={field} />
         </div>
         <div>
           <label htmlFor="context" className={labelCls}>Контекст объекта</label>
-          <textarea id="context" name="context" defaultValue={project?.context} rows={3} className={field} />
+          <textarea id="context" name="context" defaultValue={v?.context ?? project?.context} rows={3} className={field} />
         </div>
         <div>
           <label htmlFor="result" className={labelCls}>Результат</label>
-          <textarea id="result" name="result" defaultValue={project?.result} rows={3} className={field} />
+          <textarea id="result" name="result" defaultValue={v?.result ?? project?.result} rows={3} className={field} />
         </div>
       </div>
 

@@ -1,7 +1,9 @@
 import 'server-only';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { POSTS as SEED_POSTS, PROJECTS as SEED_PROJECTS, type Post, type Project } from './site';
+import { POSTS as SEED_POSTS } from './data/posts';
+import { PROJECTS as SEED_PROJECTS } from './data/projects';
+import type { Post, Project } from './types';
 
 
 
@@ -37,19 +39,20 @@ async function ensureSeeded(file: string, seed: unknown): Promise<void> {
   }
 }
 
-async function readJson<T>(file: string, seed: T): Promise<T> {
+/** Чтение хранилища. Для показа страниц битый файл не роняет сайт (отдаём сид),
+ *  но запись идёт только поверх успешно прочитанного файла: иначе сохранение одной статьи
+ *  перезаписало бы хранилище сидом и стёрло всё, что владелец добавил через админку. */
+async function readJson<T>(file: string, seed: T, strict = false): Promise<T> {
   try {
     await ensureSeeded(file, seed);
     const raw = await fs.readFile(file, 'utf8');
     return JSON.parse(raw) as T;
-  } catch {
-
-
-
+  } catch (err) {
+    if (strict) throw new Error(`Хранилище ${path.basename(file)} не читается, запись отменена.`);
+    console.error('[content] чтение хранилища не удалось, показываю сид:', file, err);
     return seed;
   }
 }
-
 
 async function writeJson(file: string, data: unknown): Promise<void> {
   await fs.mkdir(path.dirname(file), { recursive: true });
@@ -72,7 +75,7 @@ export async function getPost(slug: string): Promise<Post | undefined> {
 
 
 export async function savePost(post: Post): Promise<void> {
-  const posts = await getPosts();
+  const posts = await readJson<Post[]>(POSTS_FILE, SEED_POSTS, true);
   const i = posts.findIndex((p) => p.slug === post.slug);
   if (i >= 0) posts[i] = post;
   else posts.unshift(post);
@@ -80,7 +83,7 @@ export async function savePost(post: Post): Promise<void> {
 }
 
 export async function deletePost(slug: string): Promise<void> {
-  const posts = (await getPosts()).filter((p) => p.slug !== slug);
+  const posts = (await readJson<Post[]>(POSTS_FILE, SEED_POSTS, true)).filter((p) => p.slug !== slug);
   await writeJson(POSTS_FILE, posts);
 }
 
@@ -95,7 +98,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | undefine
 
 
 export async function saveProject(project: Project): Promise<void> {
-  const projects = await getProjects();
+  const projects = await readJson<Project[]>(PROJECTS_FILE, SEED_PROJECTS, true);
   const i = projects.findIndex((p) => p.slug === project.slug);
   if (i >= 0) projects[i] = project;
   else projects.unshift(project);
@@ -103,6 +106,6 @@ export async function saveProject(project: Project): Promise<void> {
 }
 
 export async function deleteProject(slug: string): Promise<void> {
-  const projects = (await getProjects()).filter((p) => p.slug !== slug);
+  const projects = (await readJson<Project[]>(PROJECTS_FILE, SEED_PROJECTS, true)).filter((p) => p.slug !== slug);
   await writeJson(PROJECTS_FILE, projects);
 }

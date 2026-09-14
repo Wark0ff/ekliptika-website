@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import Lines from '@/components/site/Lines';
 import { getPost, getPosts } from '@/lib/content';
 import { JsonLd, breadcrumbJsonLd } from '@/lib/seo';
-import { CTA, SITE } from '@/lib/site';
+import { CTA, FALLBACK_IMAGE, SITE } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,7 +17,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     title: post.title,
     description: post.excerpt,
     alternates: { canonical: `/blog/${post.slug}` },
-    openGraph: { type: 'article', title: post.title, description: post.excerpt, publishedTime: post.date, images: [{ url: post.cover }] },
+    openGraph: { type: 'article', title: post.title, description: post.excerpt, publishedTime: post.date, images: [{ url: post.cover || FALLBACK_IMAGE }] },
   };
 }
 
@@ -40,7 +40,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    image: `${SITE.url}${post.cover}`,
+    image: `${SITE.url}${post.cover || FALLBACK_IMAGE}`,
     author: { '@type': 'Organization', name: SITE.brandFull },
     publisher: { '@type': 'Organization', name: SITE.brandFull },
     mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
@@ -56,7 +56,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
       ])} />
 
       <header className="v1-art-hero">
-        <Image src={post.cover} alt="" fill priority sizes="100vw" />
+        <Image src={post.cover || FALLBACK_IMAGE} alt="" fill priority sizes="100vw" />
         <div className="v1-w">
           <Link className="v1-back" href="/blog"><span aria-hidden="true">←</span> Все статьи</Link>
           <p className="v1-art-meta">{post.category} / {fmt(post.date)} / {post.readingTime}</p>

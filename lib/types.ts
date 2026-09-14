@@ -43,6 +43,11 @@ export interface Project {
   example?: boolean;
 }
 
+/** Запасная картинка, если в админке не задана обложка или галерея пуста (данные из старого хранилища). */
+export const FALLBACK_IMAGE = '/img/concrete.webp';
+
+export const coverOf = (p: Pick<Project, 'photos'>) => p.photos?.[0] || FALLBACK_IMAGE;
+
 export interface Post {
   slug: string;
   title: string;

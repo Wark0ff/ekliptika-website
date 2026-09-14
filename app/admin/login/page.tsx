@@ -1,6 +1,7 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { login, type LoginState } from '../actions';
 
 function SubmitButton() {
@@ -13,14 +14,14 @@ function SubmitButton() {
 }
 
 export default function AdminLoginPage() {
-  const [state, formAction] = useFormState<LoginState, FormData>(login, {});
+  const [state, formAction] = useActionState<LoginState, FormData>(login, {});
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-ink px-5 text-paper">
       <div className="w-full max-w-sm">
         <p className="label-gold">Эклиптика</p>
         <h1 className="mt-3 text-2xl font-black uppercase">Панель управления</h1>
-        <p className="mt-2 text-sm text-paper/50">Добавление кейсов и статей блога.</p>
+        <p className="mt-2 text-sm text-paper/50">Объекты, статьи и фотографии сайта.</p>
 
         <form action={formAction} className="mt-8">
           <label htmlFor="password" className="label text-paper/60">

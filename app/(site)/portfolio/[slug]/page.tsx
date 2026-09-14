@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Lines from '@/components/site/Lines';
 import { getProjectBySlug, getProjects } from '@/lib/content';
 import { JsonLd, breadcrumbJsonLd } from '@/lib/seo';
-import { CTA, type Project } from '@/lib/site';
+import { CTA, coverOf, type Project } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,7 +20,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     alternates: { canonical: `/portfolio/${p.slug}` },
     // Примеры со стоковыми фото не индексируем: это не реализованные объекты.
     robots: p.example ? { index: false, follow: true } : undefined,
-    openGraph: { title: p.title, description: p.summary, images: [p.photos[0]] },
+    openGraph: { title: p.title, description: p.summary, images: [coverOf(p)] },
   };
 }
 
@@ -55,7 +55,7 @@ export default async function CasePage(props: { params: Promise<{ slug: string }
       ])} />
 
       <section className="v1-case-hero">
-        <Image src={project.photos[0]} alt={project.example ? '' : project.title} fill priority sizes="100vw" />
+        <Image src={coverOf(project)} alt={project.example ? '' : project.title} fill priority sizes="100vw" />
         <div className="v1-w">
           <Link className="v1-back" href="/portfolio"><span aria-hidden="true">←</span> Все объекты</Link>
           {project.example && (
@@ -85,7 +85,7 @@ export default async function CasePage(props: { params: Promise<{ slug: string }
             <p className="v1-lead" style={{ marginTop: 32 }}>{project.context}</p>
           </div>
           <figure className="v1-figure" data-reveal="img">
-            <Image src={project.photos[1] ?? project.photos[0]} alt="" fill sizes="(max-width:900px) 100vw, 50vw" />
+            <Image src={project.photos[1] || coverOf(project)} alt="" fill sizes="(max-width:900px) 100vw, 50vw" />
           </figure>
         </div>
       </section>
@@ -141,7 +141,7 @@ export default async function CasePage(props: { params: Promise<{ slug: string }
 
       {next && (
         <Link className="v1-next" href={`/portfolio/${next.slug}`}>
-          <Image src={next.photos[0]} alt="" fill sizes="100vw" />
+          <Image src={coverOf(next)} alt="" fill sizes="100vw" />
           <div className="v1-w">
             <p className="v1-num">Следующий объект</p>
             <p className="v1-h2" style={{ marginTop: 16 }}>{next.short}</p>

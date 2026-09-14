@@ -1,6 +1,6 @@
 import 'server-only';
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from 'crypto';
-import { cookies, headers, type UnsafeUnwrappedCookies, type UnsafeUnwrappedHeaders } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 
 
@@ -48,8 +48,8 @@ function verifyToken(token: string | undefined): boolean {
 }
 
 
-export function startSession(): void {
-  (cookies() as unknown as UnsafeUnwrappedCookies).set(COOKIE, createToken(), {
+export async function startSession(): Promise<void> {
+  (await cookies()).set(COOKIE, createToken(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -58,13 +58,13 @@ export function startSession(): void {
   });
 }
 
-export function endSession(): void {
-  (cookies() as unknown as UnsafeUnwrappedCookies).delete(COOKIE);
+export async function endSession(): Promise<void> {
+  (await cookies()).delete(COOKIE);
 }
 
 
-export function isAuthenticated(): boolean {
-  return verifyToken((cookies() as unknown as UnsafeUnwrappedCookies).get(COOKIE)?.value);
+export async function isAuthenticated(): Promise<boolean> {
+  return verifyToken((await cookies()).get(COOKIE)?.value);
 }
 
 
@@ -73,8 +73,8 @@ const attempts = new Map<string, Attempt>();
 const MAX_FAILS = 5;
 const LOCK_MS = 10 * 60 * 1000;
 
-function clientIp(): string {
-  const h = (headers() as unknown as UnsafeUnwrappedHeaders);
+async function clientIp(): Promise<string> {
+  const h = await headers();
 
 
 
@@ -90,13 +90,13 @@ function clientIp(): string {
 }
 
 
-export function isLockedOut(): boolean {
-  const a = attempts.get(clientIp());
+export async function isLockedOut(): Promise<boolean> {
+  const a = attempts.get(await clientIp());
   return !!a && a.until > Date.now();
 }
 
-export function recordFailure(): void {
-  const ip = clientIp();
+export async function recordFailure(): Promise<void> {
+  const ip = await clientIp();
   const now = Date.now();
   const a = attempts.get(ip);
   if (a && a.until > now) {
@@ -107,6 +107,6 @@ export function recordFailure(): void {
   attempts.set(ip, { count, until: count >= MAX_FAILS ? now + LOCK_MS : 0 });
 }
 
-export function clearFailures(): void {
-  attempts.delete(clientIp());
+export async function clearFailures(): Promise<void> {
+  attempts.delete(await clientIp());
 }

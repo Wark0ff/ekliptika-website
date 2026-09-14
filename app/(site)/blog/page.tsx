@@ -4,6 +4,7 @@ import Link from 'next/link';
 import PageHero from '@/components/site/PageHero';
 import { JsonLd, breadcrumbJsonLd } from '@/lib/seo';
 import { getPosts } from '@/lib/content';
+import { FALLBACK_IMAGE } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,7 +35,7 @@ export default async function BlogPage() {
         {featured && (
           <Link className="v1-feature" href={`/blog/${featured.slug}`} data-reveal="fade">
             <div className="v1-pc-img">
-              <Image src={featured.cover} alt="" fill priority sizes="(max-width:900px) 100vw, 58vw" />
+              <Image src={featured.cover || FALLBACK_IMAGE} alt="" fill priority sizes="(max-width:900px) 100vw, 58vw" />
             </div>
             <div>
               <p className="v1-pc-cat">{featured.category}, {fmt(featured.date)}</p>

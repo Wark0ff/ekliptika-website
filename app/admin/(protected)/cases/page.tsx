@@ -10,11 +10,11 @@ export default async function AdminCasesPage() {
     <>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black uppercase">Кейсы</h1>
-          <p className="mt-1 text-sm text-graphite-400">{projects.length} в портфолио</p>
+          <h1 className="text-2xl font-black uppercase">Объекты</h1>
+          <p className="mt-1 text-sm text-graphite-400">{projects.length} на сайте</p>
         </div>
         <Link href="/admin/cases/new" className="btn-gold">
-          + Новый кейс
+          + Новый объект
         </Link>
       </div>
 
@@ -24,7 +24,7 @@ export default async function AdminCasesPage() {
             <div className="min-w-0 flex-1">
               <p className="truncate font-bold text-ink">{p.title}</p>
               <p className="mt-0.5 text-xs text-graphite-400">
-                {p.category} · {p.status} · {p.year} · {p.budget}
+                {p.example ? 'Пример · ' : ''}{p.category} · {p.area} · {p.term}
               </p>
             </div>
             <Link
@@ -37,7 +37,7 @@ export default async function AdminCasesPage() {
           </div>
         ))}
         {projects.length === 0 && (
-          <p className="px-5 py-8 text-center text-graphite-400">Кейсов пока нет.</p>
+          <p className="px-5 py-8 text-center text-graphite-400">Объектов пока нет.</p>
         )}
       </div>
     </>

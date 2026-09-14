@@ -11,9 +11,9 @@ export default async function EditCasePage(props: { params: Promise<{ slug: stri
   return (
     <>
       <Link href="/admin/cases" className="text-sm text-graphite-400 hover:text-ink">
-        ← Кейсы
+        ← Объекты
       </Link>
-      <h1 className="mt-3 text-2xl font-black uppercase">Правка кейса</h1>
+      <h1 className="mt-3 text-2xl font-black uppercase">Правка объекта</h1>
       <CaseForm project={project} />
     </>
   );

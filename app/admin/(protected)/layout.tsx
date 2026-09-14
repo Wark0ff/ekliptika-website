@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
+export default async function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
 
 
-  if (!isAuthenticated()) redirect('/admin/login');
+  if (!(await isAuthenticated())) redirect('/admin/login');
 
   return (
     <div className="min-h-screen bg-cream text-ink">
@@ -28,7 +28,7 @@ export default function ProtectedAdminLayout({ children }: { children: React.Rea
           </Link>
           <nav className="flex items-center gap-5 text-sm font-semibold">
             <Link href="/admin/cases" className="text-graphite hover:text-gold-dark">
-              Кейсы
+              Объекты
             </Link>
             <Link href="/admin/posts" className="text-graphite hover:text-gold-dark">
               Статьи

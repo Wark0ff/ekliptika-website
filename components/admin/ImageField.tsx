@@ -82,7 +82,7 @@ export default function ImageField({
           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="/uploads/… или /portfolio/…"
+            placeholder="/uploads/… или /img/…"
             className="mt-2 w-full rounded-sm border border-line bg-paper px-3 py-2 text-xs text-graphite outline-none focus:border-gold"
           />
           {hint && <p className="mt-1 text-xs text-graphite-400">{hint}</p>}

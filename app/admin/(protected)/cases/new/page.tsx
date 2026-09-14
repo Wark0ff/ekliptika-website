@@ -5,9 +5,9 @@ export default function NewCasePage() {
   return (
     <>
       <Link href="/admin/cases" className="text-sm text-graphite-400 hover:text-ink">
-        ← Кейсы
+        ← Объекты
       </Link>
-      <h1 className="mt-3 text-2xl font-black uppercase">Новый кейс</h1>
+      <h1 className="mt-3 text-2xl font-black uppercase">Новый объект</h1>
       <CaseForm />
     </>
   );

@@ -4,10 +4,19 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { isAuthenticated } from '@/lib/auth';
 import { getProjectBySlug, saveProject, deleteProject, slugify } from '@/lib/content';
-import { CATEGORIES } from '@/lib/site';
-import type { Project, CaseStage, CaseKPI, ProjectCategory } from '@/lib/site';
+import { CATEGORIES } from '@/lib/types';
+import type { Project, CaseStage, CaseKPI, ProjectCategory } from '@/lib/types';
 
-export type CaseFormState = { error?: string };
+export type CaseFormState = { error?: string; values?: Record<string, string> };
+/** После ошибки React 19 сбрасывает форму. Возвращаем введённое, чтобы форма восстановила поля
+ *  и текст статьи или описание объекта не пропали. */
+function fail(error: string, formData: FormData) {
+  const values = Object.fromEntries(
+    [...formData.entries()].filter(([k, v]) => typeof v === 'string' && !k.startsWith('$')),
+  ) as Record<string, string>;
+  return { error, values };
+}
+
 
 
 function revalidateCases(slug: string) {
@@ -50,21 +59,21 @@ export async function saveCaseAction(
   _prev: CaseFormState,
   formData: FormData,
 ): Promise<CaseFormState> {
-  if (!isAuthenticated()) redirect('/admin/login');
+  if (!(await isAuthenticated())) redirect('/admin/login');
 
   const g = (k: string) => String(formData.get(k) ?? '').trim();
   const title = g('title');
   const editingSlug = g('editingSlug');
 
-  if (!title) return { error: 'Укажите название объекта.' };
+  if (!title) return fail('Укажите название объекта.', formData);
 
   const category = g('category') as ProjectCategory;
-  if (!CATEGORIES.includes(category)) return { error: 'Выберите категорию из списка.' };
+  if (!CATEGORIES.includes(category)) return fail('Выберите категорию из списка.', formData);
 
   const slug = editingSlug || slugify(g('short') || title);
-  if (!slug) return { error: 'Не удалось построить адрес (slug). Заполните название.' };
+  if (!slug) return fail('Не удалось построить адрес (slug). Заполните название.', formData);
   if (!editingSlug && (await getProjectBySlug(slug))) {
-    return { error: `Кейс с адресом «${slug}» уже есть. Измените короткое имя.` };
+    return fail(`Объект с адресом «${slug}» уже есть. Измените короткое имя.`, formData);
   }
 
   const statusRaw = g('status');
@@ -95,14 +104,21 @@ export async function saveCaseAction(
 
     photos: g('photos').split(/\n+/).map((s) => s.trim()).filter(Boolean),
   };
+  // Пример со стоковыми фото помечается на сайте и закрыт от индексации. Снятая галочка делает объект обычным.
+  if (formData.get('example')) project.example = true;
+  if (!project.photos.length) return fail('Добавьте хотя бы одну фотографию: первая станет обложкой.', formData);
 
-  await saveProject(project);
+  try {
+    await saveProject(project);
+  } catch (err) {
+    return fail(err instanceof Error ? err.message : 'Не удалось сохранить объект.', formData);
+  }
   revalidateCases(slug);
   redirect('/admin/cases');
 }
 
 export async function deleteCaseAction(formData: FormData): Promise<void> {
-  if (!isAuthenticated()) redirect('/admin/login');
+  if (!(await isAuthenticated())) redirect('/admin/login');
   const slug = String(formData.get('slug') ?? '').trim();
   if (slug) {
     await deleteProject(slug);

@@ -5,15 +5,15 @@ export default async function AdminDashboard() {
   const [posts, projects] = await Promise.all([getPosts(), getProjects()]);
 
   const cards = [
-    { href: '/admin/cases', title: 'Кейсы', count: projects.length, hint: 'Объекты портфолио' },
-    { href: '/admin/posts', title: 'Статьи', count: posts.length, hint: 'Материалы блога' },
+    { href: '/admin/cases', title: 'Объекты', count: projects.length, hint: 'Раздел «Объекты» на сайте' },
+    { href: '/admin/posts', title: 'Статьи', count: posts.length, hint: 'Раздел «Статьи» на сайте' },
   ];
 
   return (
     <>
       <h1 className="text-2xl font-black uppercase">Панель управления</h1>
       <p className="mt-2 text-graphite-400">
-        Добавляйте и редактируйте кейсы и статьи. Изменения появляются на сайте сразу.
+        Добавляйте и редактируйте объекты и статьи, загружайте фотографии. Изменения появляются на сайте сразу.
       </p>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2">

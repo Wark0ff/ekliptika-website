@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { SITE, OBJECT_TYPES } from '@/lib/site';
 import { getPosts, getProjects } from '@/lib/content';
+import { FALLBACK_IMAGE, coverOf } from '@/lib/types';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -23,12 +24,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Примеры объектов со стоковыми фото закрыты от индексации и в карту не входят.
   const cases: MetadataRoute.Sitemap = projects.filter((p) => !p.example).map((p) => ({
     url: `${SITE.url}/portfolio/${p.slug}`, lastModified: now, changeFrequency: 'yearly', priority: 0.7,
-    images: [`${SITE.url}${p.photos[0]}`],
+    images: [`${SITE.url}${coverOf(p)}`],
   }));
 
   const articles: MetadataRoute.Sitemap = posts.map((p) => ({
     url: `${SITE.url}/blog/${p.slug}`, lastModified: new Date(p.date), changeFrequency: 'yearly', priority: 0.6,
-    images: [`${SITE.url}${p.cover}`],
+    images: [`${SITE.url}${p.cover || FALLBACK_IMAGE}`],
   }));
 
   return [...routes, ...directions, ...cases, ...articles];
