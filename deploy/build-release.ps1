@@ -2,7 +2,7 @@
 # На сервере Next.js не собираем: заливаем готовый standalone.
 #
 # Запуск из папки проекта:  powershell -ExecutionPolicy Bypass -File deploy\build-release.ps1
-# Результат: ekliptika-release.tar.gz в папке проекта (в .gitignore).
+# Результат: ekliptika-<коммит>.tar.gz и .sha256 в папке проекта (в .gitignore).
 #
 # Код берётся из закоммиченной ветки site (git archive), а не из рабочей папки.
 # sharp нативный: после сборки на Windows в standalone лежат бинарники win32,
@@ -13,7 +13,6 @@ $branch = 'site'
 $project = (Resolve-Path "$PSScriptRoot\..").Path
 $work = Join-Path $env:TEMP ("ekliptika-release-" + (Get-Date -Format 'yyyyMMdd-HHmmss'))
 $src = Join-Path $work 'src'
-$out = Join-Path $project 'ekliptika-release.tar.gz'
 
 function Run($exe, [string[]]$argv) {
   & $exe @argv
@@ -67,11 +66,15 @@ foreach ($p in 'sharp-linux-x64', 'sharp-libvips-linux-x64') {
   Copy-Item -Recurse -Force $from "$img\$p"
 }
 
-# 5. Метка версии и архив
+# 5. Метка версии, архив, контрольная сумма (её проверяет deploy/release.sh)
 "$branch $commit $(Get-Date -Format 's')" | Out-File -Encoding ascii "$sa\RELEASE"
+$out = Join-Path $project "ekliptika-$commit.tar.gz"
 if (Test-Path $out) { Remove-Item -Force $out }
 Run tar @('-czf', $out, '-C', $sa, '.')
 $n = (tar -tzf $out | Measure-Object -Line).Lines
 $mb = [math]::Round((Get-Item $out).Length / 1MB, 1)
+$hash = (Get-FileHash -Algorithm SHA256 $out).Hash.ToLower()
+[IO.File]::WriteAllText("$out.sha256", "$hash  $(Split-Path $out -Leaf)`n")
 Write-Host "Готово: $out, файлов $n, $mb МБ, коммит $commit"
+Write-Host "Выкладка: scp $(Split-Path $out -Leaf)* deploy\release.sh root@185.182.110.38:/root/"
 Write-Host "Папку сборки можно удалить: $work"

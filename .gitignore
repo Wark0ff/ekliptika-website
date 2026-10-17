@@ -28,3 +28,4 @@ site.tar.gz
 _mockup/
 .vercel
 .env*
+/*.tar.gz.sha256

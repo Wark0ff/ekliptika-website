@@ -1,7 +1,8 @@
 # Эклиптика — systemd-юнит для Next.js (standalone).
 # Путь на сервере: /etc/systemd/system/ekliptika.service
-# В /var/www/ekliptika лежит готовый standalone-артефакт (собран на компьютере,
-# deploy/build-release.ps1), на сервере ничего не собирается.
+# current — ссылка на рабочий релиз в releases/<sha> (deploy/release.sh); релиз — готовый
+# standalone, собранный на компьютере
+# (deploy/build-release.ps1). На сервере ничего не собирается.
 # Порт 3001: на общем сервере 3000 занят ТЕРА ГРУПП.
 
 [Unit]
@@ -11,8 +12,8 @@ After=network.target
 [Service]
 Type=simple
 User=deploy
-WorkingDirectory=/var/www/ekliptika
-ExecStart=/usr/bin/node /var/www/ekliptika/server.js
+WorkingDirectory=/var/www/ekliptika/current
+ExecStart=/usr/bin/node /var/www/ekliptika/current/server.js
 Restart=always
 RestartSec=5
 Environment=NODE_ENV=production
@@ -26,7 +27,7 @@ Environment=MALLOC_ARENA_MAX=2
 MemoryHigh=450M
 MemoryMax=700M
 # Секреты и настройки сервера, файл вне каталога кода: обновления его не трогают
-EnvironmentFile=/etc/ekliptika/ekliptika.env
+EnvironmentFile=/etc/ekliptika/env
 
 [Install]
 WantedBy=multi-user.target
