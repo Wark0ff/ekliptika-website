@@ -1,6 +1,7 @@
 # Эклиптика — systemd-юнит для Next.js (standalone).
 # Путь на сервере: /etc/systemd/system/ekliptika.service
 # Запускает собранный standalone-сервер. Автостарт после перезагрузки.
+# Порт 3001: на общем сервере 3000 занят ТЕРА ГРУПП.
 
 [Unit]
 Description=Ekliptika Next.js site
@@ -15,7 +16,7 @@ ExecStart=/usr/bin/node /var/www/ekliptika/.next/standalone/server.js
 Restart=always
 RestartSec=5
 Environment=NODE_ENV=production
-Environment=PORT=3000
+Environment=PORT=3001
 Environment=HOSTNAME=127.0.0.1
 # Секреты и публичные переменные подхватываются из файла окружения
 EnvironmentFile=/var/www/ekliptika/.env.production
