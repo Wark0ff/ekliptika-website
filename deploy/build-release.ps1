@@ -76,5 +76,6 @@ $mb = [math]::Round((Get-Item $out).Length / 1MB, 1)
 $hash = (Get-FileHash -Algorithm SHA256 $out).Hash.ToLower()
 [IO.File]::WriteAllText("$out.sha256", "$hash  $(Split-Path $out -Leaf)`n")
 Write-Host "Готово: $out, файлов $n, $mb МБ, коммит $commit"
-Write-Host "Выкладка: scp $(Split-Path $out -Leaf)* deploy\release.sh root@185.182.110.38:/root/"
+Write-Host "Выкладка: scp $(Split-Path $out -Leaf)* root@185.182.110.38:/root/"
+Write-Host "На сервере: bash /root/ekliptika-release.sh /root/$(Split-Path $out -Leaf)"
 Write-Host "Папку сборки можно удалить: $work"

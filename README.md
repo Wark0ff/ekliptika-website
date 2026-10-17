@@ -52,7 +52,7 @@ deploy/               nginx, systemd, пошаговая инструкция д
 
 | Переменная | Зачем |
 |---|---|
-| `NEXT_PUBLIC_SITE_URL` | боевой адрес сайта, например `https://ekliptika.ru` |
+| `NEXT_PUBLIC_SITE_URL` | боевой адрес сайта `https://ekliptika.art`; для сервера задаётся в `deploy/build.env` |
 | `NEXT_PUBLIC_INDEX` | `1` открывает сайт поисковикам (до запуска не ставить) |
 | `NEXT_PUBLIC_METRIKA_ID` | номер счётчика Яндекс Метрики |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `LEAD_TO` | отправка заявок на почту |

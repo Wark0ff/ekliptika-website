@@ -43,7 +43,8 @@ powershell -ExecutionPolicy Bypass -File deploy\build-release.ps1
 и пересборкой, а не на сервере.
 
 ```powershell
-scp ekliptika-<коммит>.tar.gz ekliptika-<коммит>.tar.gz.sha256 deploy\release.sh root@185.182.110.38:/root/
+scp ekliptika-<коммит>.tar.gz ekliptika-<коммит>.tar.gz.sha256 root@185.182.110.38:/root/
+scp deploy\release.sh root@185.182.110.38:/root/ekliptika-release.sh   # своё имя: /root/release.sh у ТЕРА ГРУПП
 ```
 
 ## 2. Первая установка на сервере (один раз)
