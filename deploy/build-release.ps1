@@ -48,8 +48,9 @@ Copy-Item "$src\deploy\ekliptika.service", "$src\deploy\nginx.conf" "$sa\deploy\
 Remove-Item -Force -ErrorAction SilentlyContinue "$sa\.env.production", "$sa\.env", "$sa\.env.local"
 
 # 4. sharp под Linux, той же версии, что в lockfile
-$lock = Get-Content "$src\package-lock.json" -Raw | ConvertFrom-Json
-$sharpVer = $lock.packages.'node_modules/sharp'.version
+# ConvertFrom-Json в PowerShell 5.1 не читает lockfile (ключ ""), версию берёт node.
+$sharpVer = (node -p "require(process.argv[1]).packages['node_modules/sharp'].version" "$src\package-lock.json").Trim()
+if (-not $sharpVer) { throw 'Не нашлась версия sharp в package-lock.json' }
 $linux = Join-Path $work 'sharp-linux'
 New-Item -ItemType Directory -Force $linux | Out-Null
 Push-Location $linux
