@@ -1,6 +1,7 @@
 # Эклиптика — systemd-юнит для Next.js (standalone).
 # Путь на сервере: /etc/systemd/system/ekliptika.service
-# Запускает собранный standalone-сервер. Автостарт после перезагрузки.
+# В /var/www/ekliptika лежит готовый standalone-артефакт (собран на компьютере,
+# deploy/build-release.ps1), на сервере ничего не собирается.
 # Порт 3001: на общем сервере 3000 занят ТЕРА ГРУПП.
 
 [Unit]
@@ -11,15 +12,21 @@ After=network.target
 Type=simple
 User=deploy
 WorkingDirectory=/var/www/ekliptika
-# Standalone-сервер лежит в .next/standalone/server.js после сборки
-ExecStart=/usr/bin/node /var/www/ekliptika/.next/standalone/server.js
+ExecStart=/usr/bin/node /var/www/ekliptika/server.js
 Restart=always
 RestartSec=5
 Environment=NODE_ENV=production
 Environment=PORT=3001
 Environment=HOSTNAME=127.0.0.1
-# Секреты и публичные переменные подхватываются из файла окружения
-EnvironmentFile=/var/www/ekliptika/.env.production
+# Память общая с ТЕРА ГРУПП и тендерами (3 ГБ + 4 ГБ подкачки).
+# Куча V8 до 256 МБ; меньше арен malloc — sharp меньше раздувает RSS.
+Environment=NODE_OPTIONS=--max-old-space-size=256
+Environment=MALLOC_ARENA_MAX=2
+# Мягкий предел: выше 450 МБ ядро ужимает процесс; жёсткий 700 МБ: перезапуск.
+MemoryHigh=450M
+MemoryMax=700M
+# Секреты и настройки сервера, файл вне каталога кода: обновления его не трогают
+EnvironmentFile=/etc/ekliptika/ekliptika.env
 
 [Install]
 WantedBy=multi-user.target
