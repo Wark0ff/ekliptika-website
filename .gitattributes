@@ -1,0 +1,5 @@
+# Файлы для Linux-сервера: всегда LF, иначе bash и systemd спотыкаются о 
+*.sh text eol=lf
+deploy/*.service text eol=lf
+deploy/*.conf text eol=lf
+deploy/build.env text eol=lf
