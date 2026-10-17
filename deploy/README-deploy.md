@@ -103,7 +103,7 @@ chown root:deploy /etc/ekliptika/env && chmod 640 /etc/ekliptika/env
 ```bash
 tar -xzOf /root/ekliptika-<коммит>.tar.gz ./deploy/ekliptika.service > /etc/systemd/system/ekliptika.service
 systemctl daemon-reload && systemctl enable ekliptika
-bash /root/release.sh /root/ekliptika-<коммит>.tar.gz   # распакует, запустит, дождётся 200
+bash /root/ekliptika-release.sh /root/ekliptika-<коммит>.tar.gz   # распакует, запустит, дождётся 200
 ```
 
 Лимиты памяти в юните: куча V8 до 256 МБ, `MemoryHigh=450M`, `MemoryMax=700M`.
@@ -134,12 +134,12 @@ certbot renew --dry-run
 На компьютере: коммит в `site`, `deploy\build-release.ps1`, `scp` как в шаге 1. На сервере:
 
 ```bash
-bash /root/release.sh /root/ekliptika-<коммит>.tar.gz
+bash /root/ekliptika-release.sh /root/ekliptika-<коммит>.tar.gz
 ```
 
 Скрипт проверяет sha256 и gzip, распаковывает в `releases/<коммит>`, переключает `current`, перезапускает
 сервис и ждёт 200. Если ответа нет, он возвращает предыдущий релиз. Хранятся 3 последних релиза.
-Ручной откат: `bash /root/release.sh --rollback <коммит>`.
+Ручной откат: `bash /root/ekliptika-release.sh --rollback <коммит>`.
 
 ## Проверка после запуска
 
